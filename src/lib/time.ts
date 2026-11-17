@@ -7,7 +7,7 @@ export type TimeParts = {
   seconds: number;
 };
 
-export type Together = TimeParts & { years: number };
+export type Together = TimeParts & { years: number; months: number };
 
 function pad(n: number) {
   return String(n).padStart(2, "0");
@@ -62,20 +62,38 @@ export function countdownTo(now: Date, targetIso: string): TimeParts & { done: b
   return { done: false, ...splitMs(ms) };
 }
 
-/** Full years in India time, then the days and clock since the last anniversary. */
+/** Full years and months in India time, then the leftover days and clock. */
 export function timeTogether(now: Date, startIso: string): Together {
   const start = new Date(startIso);
   const s = istWall(start);
-  const n = istWall(now);
-  let years = n.year - s.year;
+  let years = istWall(now).year - s.year;
   let anniversary = wallToInstant(s.year + years, s.month, s.day, s.hour, s.minute, s.second);
   if (now.getTime() < anniversary.getTime()) {
     years -= 1;
     anniversary = wallToInstant(s.year + years, s.month, s.day, s.hour, s.minute, s.second);
   }
   if (years < 0) years = 0;
-  const parts = splitMs(now.getTime() - anniversary.getTime());
-  return { years, ...parts };
+
+  const anchor = istWall(anniversary);
+  let cursorYear = anchor.year;
+  let cursorMonth = anchor.month;
+  let months = 0;
+  for (let guard = 0; guard < 12; guard += 1) {
+    let nextMonth = cursorMonth + 1;
+    let nextYear = cursorYear;
+    if (nextMonth > 12) {
+      nextMonth = 1;
+      nextYear += 1;
+    }
+    const next = wallToInstant(nextYear, nextMonth, s.day, s.hour, s.minute, s.second);
+    if (now.getTime() < next.getTime()) break;
+    months += 1;
+    cursorMonth = nextMonth;
+    cursorYear = nextYear;
+  }
+  const monthStart = wallToInstant(cursorYear, cursorMonth, s.day, s.hour, s.minute, s.second);
+  const parts = splitMs(now.getTime() - monthStart.getTime());
+  return { years, months, ...parts };
 }
 
 export function formatIndiaDate(iso: string) {

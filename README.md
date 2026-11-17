@@ -10,12 +10,13 @@ Open `src/config.ts` and change the placeholders at the top:
 
 | Field | What it is |
 | --- | --- |
-| `herName` | The name in the headline. Placeholder: `My Love`. |
+| `herName` | The name in the headline. Currently `Jessi`. |
 | `herNickname` | The pet name on the envelope and in the letter. Placeholder: `Meri Jaan`. |
 | `hisName` | The signature. Placeholder: `Yours`. |
-| `relationshipStart` | When you two started, as an ISO date with `+05:30`. Placeholder `2020-11-21` so the counter reaches 6 years on 21 November 2026. |
+| `relationshipStart` | The day the counter starts from, as an ISO date with `+05:30`. Currently `2020-03-07` — 7 March, "our day". |
 | `birthday` | Midnight at the start of her birthday, India time. Placeholder `2026-11-21T00:00:00+05:30`. |
-| `togetherHeadline` | The heading above the live counter. |
+| `togetherHeadline` | The heading above the live counter. Currently `6+ years together`. |
+| `ourDay` | The short name for that date, shown under the counter. Currently `7 March`. |
 | `wishes`, `reasons`, `milestones`, `letter`, `songs` | The notes, scratch cards, timeline, closing letter, and playlist. |
 
 The countdown and the years-together counter both use **Asia/Kolkata**, even if her phone is set to another timezone.
@@ -35,7 +36,7 @@ http://127.0.0.1:4179/?open=1
 { year: "2020", title: "Where we began", text: "...", photo: "2020.jpg" }
 ```
 
-Leave `photo` as `null` and the page draws a small illustration instead. If the file is missing or fails to load, that same illustration shows, so a typo never leaves a broken image.
+Leave `photo` as `null` and that year keeps its illustrated scene. You do not need a photo for every year. If a file is missing or fails to load, the drawing comes back, so a typo never leaves a broken image.
 
 ## Songs
 

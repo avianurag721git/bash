@@ -15,7 +15,7 @@
  * If a video will not play where she is, swap the id.
  */
 
-const herName = "My Love";
+const herName = "Jessi";
 const herNickname = "Meri Jaan";
 const hisName = "Yours";
 
@@ -24,19 +24,19 @@ export const siteConfig = {
   herNickname,
   hisName,
 
-  /** The moment you two became a thing. The live counter starts here. */
-  relationshipStart: "2020-11-21T00:00:00+05:30",
+  /**
+   * The day you count from. 7 March is "our day"; the exact first hour
+   * can stay a little fuzzy. The live counter starts here, in IST.
+   */
+  relationshipStart: "2020-03-07T00:00:00+05:30",
+  ourDay: "7 March",
 
   /** Midnight at the start of her birthday, India time. */
   birthday: "2026-11-21T00:00:00+05:30",
 
-  /** Shown as the big heading. Update it if you change the start date. */
-  togetherHeadline: "6 years of us",
-  /** Shown until the live counter reaches this many full years. */
-  milestoneYears: 6,
-  togetherAlmost:
-    "The sixth one lands on your birthday. Until then, this is the exact time I have been yours.",
-  togetherNow: "Six years of choosing you. I would do every one of these seconds again.",
+  /** Shown as the big heading above the live counter. */
+  togetherHeadline: "6+ years together",
+  togetherNote: "7 March is our day. This is the exact time I have been yours.",
 
   envelopeKicker: "for your eyes only",
   envelopeTitle: "A letter with your name on it",
@@ -44,7 +44,7 @@ export const siteConfig = {
 
   heroKicker: "today, and every day after",
   heroGreeting: "Happy Birthday",
-  heroSub: "Six years beside you, and I would still choose the seat next to yours.",
+  heroSub: "More than six years beside you, and I would still choose the seat next to yours.",
 
   countdownKicker: "until your day begins",
   countdownTitle: "Not long now",
@@ -73,14 +73,14 @@ export const siteConfig = {
   wishes: [
     "Tum ho toh sab kuch hai.",
     `Happy birthday, ${herNickname.toLowerCase()}. You are my favourite person in every room.`,
-    "Six years, and I still look for you first in a crowd.",
+    "Years on, and I still look for you first in a crowd.",
     "You make ordinary days feel like they were planned by someone kind.",
     "Tere saath, even traffic has a soundtrack.",
     "Thank you for loving the version of me that is still learning.",
     "I hope this year is as gentle as your hands and as bright as your laugh.",
     "Dil se, and also in the small ways: good morning, reach home, eat something.",
     "You are my calm, and my favourite kind of chaos.",
-    "If home is a person, I have known her name for six years.",
+    "If home is a person, I have known her name since our day.",
     "May the cake be sweet, and the year after it even sweeter. Main hoon na.",
     "To more sunsets, more silly fights, and more of your hand in mine.",
   ],
@@ -102,12 +102,12 @@ export const siteConfig = {
 
   timelineKicker: "year by year",
   timelineTitle: "Our timeline",
-  timelineIntro: "One little flag for every year. The photos are ready whenever you are.",
+  timelineIntro: "A little drawing for every year. A photo can take its place whenever you want.",
   milestones: [
     {
       year: "2020",
       title: "Where we began",
-      text: "A hello that forgot to end. This is the year our story picked up a pen.",
+      text: "7 March. A hello that forgot to end. This is the year our story picked up a pen.",
       photo: null,
     },
     {
@@ -164,7 +164,7 @@ export const siteConfig = {
   letter: [
     `${herName},`,
     "I tried to be clever about this. I couldn't. What I feel for you has never sat still inside one sentence, and I don't think it is supposed to.",
-    "Six years ago a date on the calendar became ours. I didn't know I was meeting the person who would become my calm, my laughter, and the place I want to land.",
+    "Our day is 7 March. I don't remember the exact hour we began, only that the date became ours, and that you became my calm, my laughter, and the place I want to land.",
     "Thank you for the way you love. For your patience, your fire, your softness, and the hundred quiet ways you turn a life into a home.",
     `Happy birthday, ${herNickname}. I hope today feels as warm as you have made so many of mine.`,
     "I love you. I am so glad you were born, and so glad the world arranged for me to find you.",

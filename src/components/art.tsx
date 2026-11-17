@@ -113,52 +113,113 @@ export function LoveScene({ onBunny }: { onBunny: () => void }) {
   );
 }
 
-export function YearArt({ index }: { index: number }) {
-  const arts = [
-    <g key="moon">
-      <circle cx="80" cy="70" r="28" fill="#fff4c8" />
-      <circle cx="92" cy="62" r="22" fill="#ffe8f1" />
-      <circle cx="40" cy="40" r="3" fill="#fff" />
-      <circle cx="120" cy="36" r="2" fill="#fff" />
-      <circle cx="110" cy="100" r="2.5" fill="#fff" />
-    </g>,
-    <g key="cups">
-      <rect x="38" y="58" width="34" height="28" rx="6" fill="#fff" />
-      <path d="M72 64h8a10 10 0 0 1 0 20h-8" fill="none" stroke="#fff" strokeWidth="4" />
-      <rect x="86" y="70" width="28" height="22" rx="6" fill="#ffd6e4" />
-      <path d="M48 58c2-10 10-10 12 0" fill="none" stroke="#fff" strokeWidth="2" />
-    </g>,
-    <g key="umbrella">
-      <path d="M30 78c0-28 100-28 100 0z" fill="#ff8fab" />
-      <path d="M30 78c16-8 18-8 34 0 16-8 18-8 34 0 16-8 18-8 32 0" fill="#ffc2a8" />
-      <path d="M80 78v28" stroke="#5c2942" strokeWidth="3" strokeLinecap="round" />
-      <path d="M80 106c10 0 12 8 4 8" fill="none" stroke="#5c2942" strokeWidth="3" strokeLinecap="round" />
-    </g>,
-    <g key="stars">
-      <path d="M80 36l4 12h12l-10 7 4 12-10-7-10 7 4-12-10-7h12z" fill="#ffd36a" />
-      <path d="M40 78l3 8h8l-6 5 2 8-7-5-7 5 2-8-6-5h8z" fill="#fff" />
-      <path d="M112 84l3 8h8l-6 5 2 8-7-5-7 5 2-8-6-5h8z" fill="#e4d4ff" />
-    </g>,
-    <g key="camera">
-      <rect x="36" y="52" width="88" height="60" rx="12" fill="#5c2942" />
-      <circle cx="80" cy="82" r="16" fill="#ffd6e4" />
-      <circle cx="80" cy="82" r="8" fill="#5c2942" />
-      <rect x="58" y="42" width="22" height="12" rx="3" fill="#e85a7a" />
-    </g>,
-    <g key="flowers">
-      <path d="M70 120c8-24 8-24 0-40" fill="none" stroke="#7d9a62" strokeWidth="3" />
-      <circle cx="70" cy="72" r="8" fill="#ff8fab" />
-      <circle cx="58" cy="84" r="8" fill="#ffc2a8" />
-      <circle cx="82" cy="84" r="8" fill="#e4d4ff" />
-      <circle cx="70" cy="90" r="6" fill="#ffd36a" />
-      <path d="M96 120c6-18 10-20 4-36" fill="none" stroke="#7d9a62" strokeWidth="3" />
-      <circle cx="100" cy="78" r="7" fill="#fff" />
-    </g>,
-  ];
+function YearScene({ index }: { index: number }) {
+  const scene = index % 6;
+  if (scene === 0) {
+    return (
+      <g>
+        <rect width="320" height="180" fill="#3a2748" />
+        <circle cx="250" cy="48" r="28" fill="#fff4c8" />
+        <circle cx="262" cy="42" r="22" fill="#3a2748" />
+        <circle cx="48" cy="36" r="2" fill="#fff" />
+        <circle cx="90" cy="58" r="1.6" fill="#fff" />
+        <circle cx="140" cy="28" r="2.2" fill="#fff" />
+        <circle cx="190" cy="70" r="1.5" fill="#fff" />
+        <ellipse cx="160" cy="168" rx="180" ry="46" fill="#5c3a58" />
+        <circle cx="132" cy="118" r="14" fill="#ffd8c2" />
+        <path d="M118 150 132 124 146 150z" fill="#f48fb1" />
+        <circle cx="176" cy="116" r="14" fill="#ffd8c2" />
+        <path d="M162 150 176 122 190 150z" fill="#c9b6ff" />
+        <path d="M154 36c-6-7-16-2-16 6 0 7 16 13 16 13s16-6 16-13c0-8-10-13-16-6z" fill="#ff8fab" />
+      </g>
+    );
+  }
+  if (scene === 1) {
+    return (
+      <g>
+        <rect width="320" height="180" fill="#ffe8d6" />
+        <rect x="0" y="118" width="320" height="62" fill="#f3c7b0" />
+        <rect x="36" y="78" width="78" height="46" rx="10" fill="#fff" />
+        <path d="M114 88h12a14 14 0 0 1 0 28h-12" fill="none" stroke="#fff" strokeWidth="8" />
+        <path d="M62 78c4-16 14-16 16 0" fill="none" stroke="#e7b8a4" strokeWidth="3" />
+        <rect x="188" y="86" width="70" height="40" rx="10" fill="#ffd0e0" />
+        <path d="M258 94h10a12 12 0 0 1 0 24h-10" fill="none" stroke="#ffd0e0" strokeWidth="7" />
+        <path d="M214 86c3-14 12-14 14 0" fill="none" stroke="#e7b8a4" strokeWidth="3" />
+        <path d="M150 70c-5-6-14-1-14 5 0 6 14 11 14 11s14-5 14-11c0-6-9-11-14-5z" fill="#e85a7a" />
+      </g>
+    );
+  }
+  if (scene === 2) {
+    return (
+      <g>
+        <rect width="320" height="180" fill="#d9e4ff" />
+        <ellipse cx="160" cy="168" rx="170" ry="36" fill="#b9c7ee" />
+        <path d="M70 92c0-36 180-36 180 0z" fill="#ff8fab" />
+        <path d="M70 92c28-10 32-10 60 0 28-10 32-10 60 0 28-10 32-10 60 0" fill="#ffc2a8" />
+        <path d="M160 92v48" stroke="#5c2942" strokeWidth="4" strokeLinecap="round" />
+        <path d="M160 140c16 0 18 12 6 12" fill="none" stroke="#5c2942" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="132" cy="124" r="12" fill="#ffd8c2" />
+        <path d="M120 156 132 130 144 156z" fill="#f48fb1" />
+        <circle cx="188" cy="124" r="12" fill="#ffd8c2" />
+        <path d="M176 156 188 130 200 156z" fill="#c9b6ff" />
+        <circle cx="46" cy="40" r="3" fill="#fff" />
+        <circle cx="80" cy="64" r="2.4" fill="#fff" />
+        <circle cx="250" cy="36" r="2.6" fill="#fff" />
+        <circle cx="274" cy="78" r="2" fill="#fff" />
+      </g>
+    );
+  }
+  if (scene === 3) {
+    return (
+      <g>
+        <rect width="320" height="180" fill="#ffe3c4" />
+        <circle cx="250" cy="40" r="26" fill="#ffd36a" />
+        <path d="M40 150c40-20 60 10 100-8 36-16 70 8 140-16" fill="none" stroke="#f7b7c8" strokeWidth="16" strokeLinecap="round" />
+        <ellipse cx="90" cy="138" rx="8" ry="4" fill="#e85a7a" />
+        <ellipse cx="112" cy="128" rx="8" ry="4" fill="#e85a7a" />
+        <ellipse cx="150" cy="142" rx="8" ry="4" fill="#b79adf" />
+        <ellipse cx="174" cy="132" rx="8" ry="4" fill="#b79adf" />
+        <path d="M214 78c-7-8-18-2-18 7 0 8 18 15 18 15s18-7 18-15c0-9-11-15-18-7z" fill="#e85a7a" />
+      </g>
+    );
+  }
+  if (scene === 4) {
+    return (
+      <g>
+        <rect width="320" height="180" fill="#fff1ea" />
+        <rect x="28" y="28" width="120" height="100" rx="16" fill="#ffe4f0" />
+        <circle cx="88" cy="70" r="28" fill="#fff6c8" />
+        <circle cx="100" cy="64" r="22" fill="#ffe4f0" />
+        <rect x="190" y="96" width="70" height="54" rx="8" fill="#7d9a62" />
+        <ellipse cx="225" cy="96" rx="48" ry="18" fill="#9db87a" />
+        <rect x="218" y="78" width="14" height="22" rx="6" fill="#5c8a4a" />
+        <circle cx="70" cy="150" r="10" fill="#ffb703" opacity="0.85" />
+        <path d="M70 150c18 0 22 16 8 16" fill="none" stroke="#e7a23a" strokeWidth="4" strokeLinecap="round" />
+      </g>
+    );
+  }
   return (
-    <svg viewBox="0 0 160 140" className="h-full w-full" aria-hidden>
-      <rect width="160" height="140" fill="#ffe8f1" />
-      {arts[index % arts.length]}
+    <g>
+      <rect width="320" height="180" fill="#ffe8f2" />
+      <ellipse cx="160" cy="168" rx="180" ry="40" fill="#f7c6d6" />
+      <path d="M118 150 160 78 202 150z" fill="#fff" />
+      <rect x="136" y="110" width="48" height="40" fill="#ffd6e4" />
+      <path d="M148 150v-16h16v16" fill="#e85a7a" />
+      <circle cx="168" cy="100" r="4" fill="#ffd36a" />
+      <rect x="46" y="118" width="10" height="36" fill="#7d9a62" />
+      <circle cx="51" cy="108" r="16" fill="#9db87a" />
+      <circle cx="248" cy="132" r="8" fill="#ff8fab" />
+      <circle cx="266" cy="140" r="7" fill="#ffc2a8" />
+      <circle cx="258" cy="148" r="6" fill="#ffd36a" />
+      <path d="M250 48c-5-6-14-1-14 5 0 6 14 11 14 11s14-5 14-11c0-6-9-11-14-5z" fill="#e85a7a" />
+    </g>
+  );
+}
+
+export function YearArt({ index }: { index: number }) {
+  return (
+    <svg viewBox="0 0 320 180" className="h-full w-full" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      <YearScene index={index} />
     </svg>
   );
 }

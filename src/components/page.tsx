@@ -115,9 +115,11 @@ function Countdown() {
 function Together() {
   const now = useNow();
   const elapsed = timeTogether(now, siteConfig.relationshipStart);
-  const reached = elapsed.years >= siteConfig.milestoneYears;
-  const units = [
+  const headline = [
     { label: "years", value: String(elapsed.years) },
+    { label: "months", value: String(elapsed.months) },
+  ];
+  const clock = [
     { label: "days", value: String(elapsed.days) },
     { label: "hours", value: pad2(elapsed.hours) },
     { label: "mins", value: pad2(elapsed.minutes) },
@@ -126,26 +128,30 @@ function Together() {
   return (
     <Block
       id="together"
-      kicker="since the beginning"
+      kicker="since our day"
       title={siteConfig.togetherHeadline}
-      intro={reached ? siteConfig.togetherNow : siteConfig.togetherAlmost}
+      intro={siteConfig.togetherNote}
     >
-      <div className="mx-auto grid max-w-lg grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-3">
-        {units.map((unit, index) => (
-          <div
-            key={unit.label}
-            className={cn(
-              "glass rounded-3xl px-3 py-4 text-center",
-              index === 0 && "col-span-2 sm:col-span-1",
-            )}
-          >
-            <div className="text-3xl font-semibold tabular-nums text-ink">{unit.value}</div>
-            <div className="mt-1 text-[10px] tracking-[0.16em] text-rose-700/70 uppercase">{unit.label}</div>
-          </div>
-        ))}
+      <div className="mx-auto max-w-lg space-y-2">
+        <div className="grid grid-cols-2 gap-2">
+          {headline.map((unit) => (
+            <div key={unit.label} className="glass rounded-3xl px-3 py-5 text-center">
+              <div className="text-4xl font-semibold tabular-nums text-ink">{unit.value}</div>
+              <div className="mt-1 text-[10px] tracking-[0.16em] text-rose-700/70 uppercase">{unit.label}</div>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-4 gap-2">
+          {clock.map((unit) => (
+            <div key={unit.label} className="glass rounded-2xl px-2 py-3 text-center">
+              <div className="text-xl font-semibold tabular-nums text-ink">{unit.value}</div>
+              <div className="mt-1 text-[10px] tracking-[0.14em] text-rose-700/70 uppercase">{unit.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
       <p className="mt-4 text-center text-sm text-ink/65">
-        Counting from {formatIndiaDate(siteConfig.relationshipStart)}.
+        {siteConfig.ourDay} · counting from {formatIndiaDate(siteConfig.relationshipStart)}.
       </p>
     </Block>
   );
