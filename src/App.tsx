@@ -3,7 +3,7 @@ import { AnimatePresence, MotionConfig, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/config";
 import { useStudio } from "@/context/studio";
 import { Envelope } from "@/components/envelope";
-import { Balloons, Confetti, CursorHearts, Fireworks } from "@/components/effects";
+import { Balloons, Confetti, CursorHearts, Fireworks, Snow } from "@/components/effects";
 import { LovePage } from "@/components/page";
 import { MusicPlayer } from "@/components/music-player";
 
@@ -29,6 +29,7 @@ function Experience() {
 
   return (
     <div className="relative min-h-dvh text-ink">
+      <Snow />
       <Confetti />
       <Balloons />
       <Fireworks />

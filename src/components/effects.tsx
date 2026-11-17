@@ -209,6 +209,37 @@ export function Fireworks() {
   );
 }
 
+export function Snow() {
+  const reduce = useReducedMotion();
+  if (reduce) return null;
+  const flakes = Array.from({ length: 16 }, (_, index) => ({
+    left: `${(index * 61) % 100}%`,
+    delay: `${(index % 8) * 0.7}s`,
+    duration: `${11 + (index % 5) * 2}s`,
+    size: 10 + (index % 4) * 4,
+    drift: index % 2 === 0 ? "8px" : "-10px",
+  }));
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[5] overflow-hidden" aria-hidden>
+      {flakes.map((flake, index) => (
+        <span
+          key={index}
+          className="snowflake"
+          style={{
+            left: flake.left,
+            animationDelay: flake.delay,
+            animationDuration: flake.duration,
+            fontSize: flake.size,
+            ["--drift" as string]: flake.drift,
+          }}
+        >
+          ❄
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function CursorHearts() {
   const reduce = useReducedMotion();
   const [fine, setFine] = useState(false);

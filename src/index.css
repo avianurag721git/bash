@@ -234,6 +234,54 @@ body {
   }
 }
 
+.snowflake {
+  position: absolute;
+  top: -8vh;
+  color: #fff;
+  text-shadow: 0 0 8px rgb(160 140 190 / 0.55);
+  animation: snowfall linear infinite;
+}
+
+.fairy {
+  position: absolute;
+  top: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  animation: twinkle 2.6s ease-in-out infinite;
+}
+
+.fairy::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: -10px;
+  width: 1px;
+  height: 10px;
+  background: rgb(232 90 122 / 0.35);
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(var(--drift, 0px), 110vh, 0);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.45;
+    box-shadow: 0 0 6px currentColor;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 14px currentColor;
+  }
+}
+
 @keyframes rise {
   0% {
     transform: translateY(0) rotate(-4deg);
@@ -252,7 +300,9 @@ body {
   .floaty,
   .flicker,
   .vinyl,
-  .balloon {
+  .balloon,
+  .snowflake,
+  .fairy {
     animation: none !important;
   }
 

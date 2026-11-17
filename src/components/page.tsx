@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent, type PointerEvent, type ReactNode } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/config";
-import { formatIndiaDate, pad2, countdownTo, timeTogether } from "@/lib/time";
+import { formatIndiaDate, pad2, countdownTo } from "@/lib/time";
 import { useNow } from "@/lib/use-now";
 import { useStudio } from "@/context/studio";
 import { CakeArt, LoveScene, YearArt } from "@/components/art";
@@ -52,6 +52,16 @@ function Hero() {
   ];
   return (
     <header id="hero" className="relative mx-auto flex min-h-[88dvh] w-full max-w-3xl flex-col items-center justify-center px-5 pt-16 text-center">
+      <div className="pointer-events-none absolute inset-x-6 top-3 h-8" aria-hidden>
+        <div className="absolute top-2 right-2 left-2 h-px bg-rose-300/70" />
+        {["#ffd36a", "#ffb7c8", "#fff", "#ffd36a", "#c9b6ff", "#ffb7c8", "#ffd36a"].map((color, index) => (
+          <span
+            key={color + index}
+            className="fairy"
+            style={{ left: `${8 + index * 14}%`, background: color, color, animationDelay: `${index * 0.25}s` }}
+          />
+        ))}
+      </div>
       {hearts.map((heart) => (
         <span
           key={`${heart.left}-${heart.top}`}
@@ -112,47 +122,44 @@ function Countdown() {
   );
 }
 
-function Together() {
-  const now = useNow();
-  const elapsed = timeTogether(now, siteConfig.relationshipStart);
-  const headline = [
-    { label: "years", value: String(elapsed.years) },
-    { label: "months", value: String(elapsed.months) },
-  ];
-  const clock = [
-    { label: "days", value: String(elapsed.days) },
-    { label: "hours", value: pad2(elapsed.hours) },
-    { label: "mins", value: pad2(elapsed.minutes) },
-    { label: "secs", value: pad2(elapsed.seconds) },
-  ];
+function Snowflake({ lit }: { lit: boolean }) {
   return (
-    <Block
-      id="together"
-      kicker="since our day"
-      title={siteConfig.togetherHeadline}
-      intro={siteConfig.togetherNote}
-    >
-      <div className="mx-auto max-w-lg space-y-2">
-        <div className="grid grid-cols-2 gap-2">
-          {headline.map((unit) => (
-            <div key={unit.label} className="glass rounded-3xl px-3 py-5 text-center">
-              <div className="text-4xl font-semibold tabular-nums text-ink">{unit.value}</div>
-              <div className="mt-1 text-[10px] tracking-[0.16em] text-rose-700/70 uppercase">{unit.label}</div>
+    <svg viewBox="0 0 48 48" className={cn("h-11 w-11 transition-all duration-500", lit ? "scale-100 opacity-100" : "scale-75 opacity-30")} aria-hidden>
+      <g fill="none" stroke={lit ? "#7aa2d6" : "#d7c6d4"} strokeWidth="2" strokeLinecap="round">
+        <path d="M24 6v36M8 14l32 20M8 34l32-20" />
+        <path d="M24 12l-4-4M24 12l4-4M24 36l-4 4M24 36l4 4M14 18l-6-2M14 18l-2 6M34 18l6-2M34 18l2 6M14 30l-6 2M14 30l-2-6M34 30l6 2M34 30l2-6" />
+      </g>
+    </svg>
+  );
+}
+
+function Together() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.4 });
+  const reduce = useReducedMotion();
+  const total = siteConfig.wintersTogether;
+  const [count, setCount] = useState(0);
+  const shown = reduce ? total : count;
+
+  useEffect(() => {
+    if (!inView || reduce || count >= total) return;
+    const timer = window.setTimeout(() => setCount((current) => current + 1), 420);
+    return () => window.clearTimeout(timer);
+  }, [count, inView, reduce, total]);
+
+  return (
+    <Block id="together" kicker="how it began" title={siteConfig.togetherHeadline} intro={siteConfig.togetherNote}>
+      <div ref={ref} className="mx-auto max-w-md">
+        <div className="flex flex-wrap justify-center gap-3" aria-label={`${shown} of ${total} winters`}>
+          {Array.from({ length: total }, (_, index) => (
+            <div key={index} className="flex flex-col items-center gap-1">
+              <Snowflake lit={index < shown} />
+              <span className={cn("text-[10px] tracking-widest", index < shown ? "text-sky-700/80" : "text-ink/30")}>{index + 1}</span>
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-4 gap-2">
-          {clock.map((unit) => (
-            <div key={unit.label} className="glass rounded-2xl px-2 py-3 text-center">
-              <div className="text-xl font-semibold tabular-nums text-ink">{unit.value}</div>
-              <div className="mt-1 text-[10px] tracking-[0.14em] text-rose-700/70 uppercase">{unit.label}</div>
-            </div>
-          ))}
-        </div>
+        <p className="mt-5 text-center text-sm text-ink/65">Met in {siteConfig.metIn}. The exact day never got written down.</p>
       </div>
-      <p className="mt-4 text-center text-sm text-ink/65">
-        {siteConfig.ourDay} · counting from {formatIndiaDate(siteConfig.relationshipStart)}.
-      </p>
     </Block>
   );
 }

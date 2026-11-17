@@ -13,13 +13,13 @@ Open `src/config.ts` and change the placeholders at the top:
 | `herName` | The name in the headline. Currently `Jessi`. |
 | `herNickname` | The pet name on the envelope and in the letter. Placeholder: `Meri Jaan`. |
 | `hisName` | The signature. Placeholder: `Yours`. |
-| `relationshipStart` | The day the counter starts from, as an ISO date with `+05:30`. Currently `2020-03-07` — 7 March, "our day". |
+| `metIn` | When you met, as a season. Currently `winter 2020`. There is no exact day. |
+| `wintersTogether` | How many snowflakes to show. Currently `6`. |
 | `birthday` | Midnight at the start of her birthday, India time. Placeholder `2026-11-21T00:00:00+05:30`. |
-| `togetherHeadline` | The heading above the live counter. Currently `6+ years together`. |
-| `ourDay` | The short name for that date, shown under the counter. Currently `7 March`. |
+| `togetherHeadline` | The heading of the winters section. Currently `6 winters together`. |
 | `wishes`, `reasons`, `milestones`, `letter`, `songs` | The notes, scratch cards, timeline, closing letter, and playlist. |
 
-The countdown and the years-together counter both use **Asia/Kolkata**, even if her phone is set to another timezone.
+The birthday countdown uses **Asia/Kolkata**, even if her phone is set to another timezone. The winters section does not count from a made-up meeting date.
 
 While you are editing, add `?open=1` to the address to skip the envelope:
 
@@ -90,7 +90,7 @@ Google Fonts and YouTube load from the internet when she opens the page. Everyth
 
 - Tap the seal to open the letter. That tap also starts the music.
 - Watch the countdown until 21 November, midnight IST. On the day, it switches to a birthday message.
-- See the live years, days, hours, minutes, and seconds since `relationshipStart`.
+- See six winters, one snowflake at a time, for the season you met.
 - Blow out the candles with the microphone, or tap the cake. Then type a wish. The wish stays on her phone.
 - Swipe the note stack, or use the buttons.
 - Scratch the pink cards.

@@ -80,6 +80,8 @@ export function LoveScene({ onBunny }: { onBunny: () => void }) {
         <path d="M150 102q6 5 12 0" fill="none" stroke="#e56b86" strokeWidth="1.7" strokeLinecap="round" />
         <ellipse cx="142" cy="100" rx="4" ry="2.2" fill="#ff9bb3" />
         <ellipse cx="170" cy="100" rx="4" ry="2.2" fill="#ff9bb3" />
+        <path d="M140 116c10 10 22 10 32 0" fill="none" stroke="#e85a7a" strokeWidth="5" strokeLinecap="round" />
+        <path d="M166 118c6 12 2 22-6 26" fill="none" stroke="#ffb3c7" strokeWidth="4" strokeLinecap="round" />
       </g>
 
       <g>
@@ -92,6 +94,10 @@ export function LoveScene({ onBunny }: { onBunny: () => void }) {
         <path d="M222 92q4 4 7 0" fill="none" stroke="#5c2942" strokeWidth="1.7" strokeLinecap="round" />
         <path d="M214 102q6 5 12 0" fill="none" stroke="#e56b86" strokeWidth="1.7" strokeLinecap="round" />
         <path d="M186 140c16 4 24-6 30 0" fill="none" stroke="#ffd8c2" strokeWidth="7" strokeLinecap="round" />
+        <rect x="204" y="146" width="16" height="14" rx="3" fill="#fff" />
+        <rect x="206" y="148" width="12" height="8" rx="2" fill="#d7b08a" />
+        <path d="M220 150h4a4 4 0 0 1 0 8h-4" fill="none" stroke="#fff" strokeWidth="2" />
+        <path d="M208 146c1-6 4-6 5 0" fill="none" stroke="#efe7ff" strokeWidth="1.4" />
       </g>
 
       <g>
@@ -137,6 +143,24 @@ function YearScene({ index }: { index: number }) {
   if (scene === 1) {
     return (
       <g>
+        <rect width="320" height="180" fill="#fff1f4" />
+        <rect x="96" y="28" width="128" height="124" rx="16" fill="#fff" />
+        <rect x="96" y="28" width="128" height="32" rx="16" fill="#e85a7a" />
+        <rect x="96" y="48" width="128" height="12" fill="#e85a7a" />
+        <text x="160" y="112" textAnchor="middle" fontFamily="Poppins, sans-serif" fontSize="42" fontWeight="700" fill="#5c2942">
+          7
+        </text>
+        <path d="M214 46c-5-6-14-1-14 5 0 6 14 11 14 11s14-5 14-11c0-6-9-11-14-5z" fill="#ff8fab" />
+        <circle cx="48" cy="48" r="3" fill="#ffd36a" />
+        <circle cx="272" cy="64" r="2.5" fill="#ffd36a" />
+        <circle cx="40" cy="120" r="2" fill="#ffb7c8" />
+        <circle cx="286" cy="130" r="3" fill="#ffb7c8" />
+      </g>
+    );
+  }
+  if (scene === 2) {
+    return (
+      <g>
         <rect width="320" height="180" fill="#ffe8d6" />
         <rect x="0" y="118" width="320" height="62" fill="#f3c7b0" />
         <rect x="36" y="78" width="78" height="46" rx="10" fill="#fff" />
@@ -149,7 +173,7 @@ function YearScene({ index }: { index: number }) {
       </g>
     );
   }
-  if (scene === 2) {
+  if (scene === 3) {
     return (
       <g>
         <rect width="320" height="180" fill="#d9e4ff" />
@@ -169,7 +193,7 @@ function YearScene({ index }: { index: number }) {
       </g>
     );
   }
-  if (scene === 3) {
+  if (scene === 4) {
     return (
       <g>
         <rect width="320" height="180" fill="#ffe3c4" />
@@ -183,7 +207,7 @@ function YearScene({ index }: { index: number }) {
       </g>
     );
   }
-  if (scene === 4) {
+  if (scene === 5) {
     return (
       <g>
         <rect width="320" height="180" fill="#fff1ea" />
