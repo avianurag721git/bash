@@ -433,3 +433,29 @@ export function playCrackleSound(delayStartTime?: number) {
     // Ignore
   }
 }
+
+/**
+ * Cute cartoon munching sound (eating cake)
+ */
+export function playMunchSound() {
+  if (!soundEnabled) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  try {
+    [0, 0.14].forEach((offset) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(360, now + offset);
+      osc.frequency.exponentialRampToValueAtTime(160, now + offset + 0.09);
+      gain.gain.setValueAtTime(0.001, now + offset);
+      gain.gain.linearRampToValueAtTime(0.09, now + offset + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.1);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + offset);
+      osc.stop(now + offset + 0.11);
+    });
+  } catch { }
+}

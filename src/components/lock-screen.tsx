@@ -5,7 +5,7 @@ import { useNow } from "@/lib/use-now";
 import { countdownTo, pad2 } from "@/lib/time";
 import { useStudio } from "@/context/studio";
 import { playCelebrationSound, playPopSound } from "@/lib/sound-effects";
-import { Lock, Sparkles, KeyRound, Clock, Play, Pause, Disc3 } from "lucide-react";
+import { Lock, Sparkles, KeyRound, Clock, Play, Pause, Disc3, Film, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -48,6 +48,7 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
   const playerRef = useRef<YtPlayer | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loadingAudio, setLoadingAudio] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   // Automatically unlock when time reaches 11:59 PM
   useEffect(() => {
@@ -333,31 +334,52 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
               </div>
             </div>
 
-            {/* Play/Pause Button */}
-            <Button
-              type="button"
-              onClick={handleToggleSong}
-              disabled={loadingAudio}
-              className={`h-9 sm:h-10 px-3.5 sm:px-4 rounded-full font-semibold text-xs shadow-md shrink-0 flex items-center gap-1.5 transition-all ${
-                isPlaying
-                  ? "bg-rose-600 hover:bg-rose-700 text-white scale-102"
-                  : "bg-rose-500 hover:bg-rose-600 text-white hover:scale-105"
-              }`}
-            >
-              {loadingAudio ? (
-                <span className="text-[11px]">Loading...</span>
-              ) : isPlaying ? (
-                <>
-                  <Pause className="size-3.5 fill-white" />
-                  <span>Pause</span>
-                </>
-              ) : (
-                <>
-                  <Play className="size-3.5 fill-white ml-0.5" />
-                  <span>Play 🎵</span>
-                </>
-              )}
-            </Button>
+            {/* Play/Pause & Watch Video Buttons */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <Button
+                type="button"
+                onClick={handleToggleSong}
+                disabled={loadingAudio}
+                className={`h-9 px-3 rounded-full font-semibold text-xs shadow-md flex items-center gap-1.5 transition-all ${
+                  isPlaying
+                    ? "bg-rose-600 hover:bg-rose-700 text-white scale-102"
+                    : "bg-rose-500 hover:bg-rose-600 text-white hover:scale-105"
+                }`}
+              >
+                {loadingAudio ? (
+                  <span className="text-[11px]">Loading...</span>
+                ) : isPlaying ? (
+                  <>
+                    <Pause className="size-3.5 fill-white" />
+                    <span>Pause</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="size-3.5 fill-white ml-0.5" />
+                    <span>Play 🎵</span>
+                  </>
+                )}
+              </Button>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  playPopSound();
+                  try {
+                    playerRef.current?.pauseVideo();
+                    setIsPlaying(false);
+                  } catch {}
+                  setShowVideoModal(true);
+                }}
+                className="h-9 px-2.5 rounded-full border-rose-300 bg-white/90 text-rose-700 text-xs font-semibold hover:bg-rose-50 hover:scale-105 transition-all shadow-xs gap-1"
+                title="Watch Full Music Video"
+              >
+                <Film className="size-3.5 text-rose-500" />
+                <span className="hidden sm:inline">Watch Video</span>
+                <span className="sm:hidden">Video</span>
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -420,6 +442,52 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
           </div>
         )}
       </motion.div>
+
+      {/* Official Music Video Modal */}
+      <AnimatePresence>
+        {showVideoModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4"
+            onClick={() => setShowVideoModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="relative w-full max-w-2xl rounded-3xl overflow-hidden border border-white/20 shadow-2xl bg-neutral-950 p-2 sm:p-3"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between pb-2 px-2 text-white">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-rose-400">🎬 Official Music Video</span>
+                  <span className="text-xs text-white/70 truncate">
+                    {siteConfig.lockSong.title} — {siteConfig.lockSong.artist}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowVideoModal(false)}
+                  className="rounded-full bg-white/20 hover:bg-white/40 text-white p-1 text-xs cursor-pointer transition-colors"
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
+              <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-inner">
+                <iframe
+                  src={`https://www.youtube.com/embed/${siteConfig.lockSong.videoId}?autoplay=1&rel=0&playsinline=1`}
+                  title={siteConfig.lockSong.title}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

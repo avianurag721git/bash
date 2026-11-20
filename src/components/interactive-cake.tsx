@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CakeArtAnimated, type CakeStage } from "@/components/cake-art-animated";
+import { CakeEatingSquad } from "@/components/cake-eating-squad";
 import { useStudio } from "@/context/studio";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +29,7 @@ export function InteractiveCake({ onSequenceComplete, className }: InteractiveCa
 
   const stopMicRef = useRef<(() => void) | null>(null);
   const timersRef = useRef<number[]>([]);
-  const { popConfetti, launchFireworks } = useStudio();
+  const { popConfetti, launchFireworks, triggerSkyCelebration } = useStudio();
 
   // Clear timers on unmount
   useEffect(() => {
@@ -156,12 +157,13 @@ export function InteractiveCake({ onSequenceComplete, className }: InteractiveCa
       addTimer(() => {
         setStage("cake_split");
 
-        // 4. Celebratory fanfare & confetti
+        // 4. Celebratory fanfare & confetti + Midnight Sky Shots Celebration
         addTimer(() => {
           setStage("cut_celebration");
           playCelebrationSound();
           popConfetti();
           launchFireworks();
+          triggerSkyCelebration();
           onSequenceComplete?.();
         }, 500);
       }, 1200);
@@ -197,7 +199,7 @@ export function InteractiveCake({ onSequenceComplete, className }: InteractiveCa
   };
 
   return (
-    <div className={`mx-auto flex w-full max-w-md flex-col items-center ${className ?? ""}`}>
+    <div className={`mx-auto flex w-full max-w-md sm:max-w-xl flex-col items-center ${className ?? ""}`}>
       {/* Interactive Animated Cake Art */}
       <div className="relative w-full cursor-pointer py-2" onClick={() => stage === "ready_to_blow" && handleBlow()}>
         <CakeArtAnimated stage={stage} />
@@ -355,6 +357,9 @@ export function InteractiveCake({ onSequenceComplete, className }: InteractiveCa
               exit={{ opacity: 0 }}
               className="flex flex-col items-center gap-4 text-center w-full"
             >
+              {/* Four Cartoon Girls Eating the Cake: Shalini, Alka, Anushka & Sandhya */}
+              <CakeEatingSquad />
+
               <div className="rounded-3xl bg-white/90 p-5 shadow-lg border border-rose-100 max-w-sm w-full">
                 <div className="flex items-center justify-center gap-1.5 text-rose-500 mb-1">
                   <Sparkles className="size-5" />

@@ -10,6 +10,7 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
+  Film,
 } from "lucide-react";
 import { siteConfig } from "@/config";
 import { useStudio } from "@/context/studio";
@@ -38,6 +39,7 @@ export function MusicPlayer() {
   const [openPlaylist, setOpenPlaylist] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   const song = siteConfig.songs[index];
   if (!song) return null;
@@ -48,6 +50,35 @@ export function MusicPlayer() {
       style={{ bottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
       aria-label="Birthday Soundtrack Player"
     >
+      {/* Floating Video Player Window */}
+      {showVideo && !minimized ? (
+        <div className="glass mb-3 overflow-hidden rounded-3xl p-2 shadow-2xl backdrop-blur-xl border border-white/70">
+          <div className="flex items-center justify-between pb-1.5 px-2">
+            <span className="flex items-center gap-1.5 text-xs font-bold text-rose-600">
+              <Film className="size-3.5" />
+              <span className="truncate max-w-[220px]">{song.title}</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowVideo(false)}
+              className="text-[11px] font-semibold text-ink/60 hover:text-rose-600 px-1 py-0.5 rounded cursor-pointer"
+            >
+              Close ✕
+            </button>
+          </div>
+          <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-inner">
+            <iframe
+              key={song.videoId}
+              src={`https://www.youtube.com/embed/${song.videoId}?autoplay=1&rel=0&playsinline=1`}
+              title={song.title}
+              className="h-full w-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      ) : null}
+
       {/* Playlist Drawer */}
       {openPlaylist && !minimized ? (
         <div className="glass mb-3 max-h-72 overflow-y-auto rounded-3xl p-3 shadow-xl backdrop-blur-xl">
@@ -256,6 +287,24 @@ export function MusicPlayer() {
                 )}
               >
                 <Sparkles className="size-3.5" />
+              </Button>
+
+              {/* Watch Video button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={showVideo ? "Hide music video" : "Watch music video"}
+                title={showVideo ? "Close music video" : "Watch official music video 🎬"}
+                onClick={() => {
+                  setShowVideo((v) => !v);
+                  if (openPlaylist) setOpenPlaylist(false);
+                }}
+                className={cn(
+                  "size-8 rounded-full transition-colors",
+                  showVideo ? "bg-rose-500 text-white shadow-xs" : "text-rose-600 hover:bg-rose-100/60",
+                )}
+              >
+                <Film className="size-3.5" />
               </Button>
 
               {/* Playlist button */}

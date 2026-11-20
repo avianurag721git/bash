@@ -288,3 +288,95 @@ export function CursorHearts() {
     </div>
   );
 }
+
+export function ShootingStars() {
+  const reduce = useReducedMotion();
+  const [stars, setStars] = useState<Array<{ id: number; top: number; left: number; duration: number }>>([]);
+
+  useEffect(() => {
+    if (reduce) return;
+    const interval = window.setInterval(() => {
+      const newStar = {
+        id: Date.now() + Math.random(),
+        top: Math.random() * 45,
+        left: 20 + Math.random() * 70,
+        duration: 1.2 + Math.random() * 0.8,
+      };
+      setStars((prev) => [...prev.slice(-4), newStar]);
+    }, 4500);
+
+    return () => window.clearInterval(interval);
+  }, [reduce]);
+
+  if (reduce) return null;
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-10 overflow-hidden" aria-hidden>
+      {stars.map((star) => (
+        <motion.div
+          key={star.id}
+          initial={{ opacity: 0, x: 0, y: 0, scale: 0.3 }}
+          animate={{
+            opacity: [0, 1, 1, 0],
+            x: -240,
+            y: 200,
+            scale: [0.3, 1, 1, 0.2],
+          }}
+          transition={{ duration: star.duration, ease: "easeInOut" }}
+          onAnimationComplete={() => setStars((prev) => prev.filter((s) => s.id !== star.id))}
+          className="absolute h-0.5 w-24 -rotate-45 bg-gradient-to-r from-transparent via-amber-200 to-white shadow-[0_0_8px_#fff]"
+          style={{ top: `${star.top}%`, left: `${star.left}%` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+const NOTES = ["♪", "♫", "♩", "♬", "✨", "💕"];
+
+export function FloatingMusicNotes() {
+  const { playing } = useStudio();
+  const reduce = useReducedMotion();
+  const [notes, setNotes] = useState<Array<{ id: number; symbol: string; left: number; size: number }>>([]);
+
+  useEffect(() => {
+    if (!playing || reduce) return;
+
+    const interval = window.setInterval(() => {
+      const newNote = {
+        id: Date.now() + Math.random(),
+        symbol: NOTES[Math.floor(Math.random() * NOTES.length)],
+        left: 65 + Math.random() * 30,
+        size: 14 + Math.random() * 12,
+      };
+      setNotes((prev) => [...prev.slice(-10), newNote]);
+    }, 1800);
+
+    return () => window.clearInterval(interval);
+  }, [playing, reduce]);
+
+  if (!playing || reduce) return null;
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-20 overflow-hidden" aria-hidden>
+      {notes.map((note) => (
+        <motion.span
+          key={note.id}
+          initial={{ opacity: 0, y: "95vh", x: 0, scale: 0.6 }}
+          animate={{
+            opacity: [0, 0.8, 0.7, 0],
+            y: "-10vh",
+            x: [0, -25, 25, -15],
+            scale: [0.6, 1.1, 1, 0.8],
+          }}
+          transition={{ duration: 7, ease: "easeOut" }}
+          onAnimationComplete={() => setNotes((prev) => prev.filter((n) => n.id !== note.id))}
+          className="absolute font-semibold text-rose-400/75 select-none drop-shadow-sm"
+          style={{ left: `${note.left}%`, fontSize: `${note.size}px` }}
+        >
+          {note.symbol}
+        </motion.span>
+      ))}
+    </div>
+  );
+}
