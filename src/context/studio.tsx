@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { siteConfig } from "@/config";
+import { setSoundEffectsEnabled } from "@/lib/sound-effects";
 
 type StudioValue = {
   ready: boolean;
@@ -16,15 +17,25 @@ type StudioValue = {
   index: number;
   unlocked: boolean;
   notice: string | null;
+  volume: number;
+  muted: boolean;
+  soundEffects: boolean;
+  setVolume: (val: number) => void;
+  toggleMute: () => void;
+  toggleSoundEffects: () => void;
   toggle: () => void;
   next: () => void;
   prev: () => void;
   playIndex: (index: number) => void;
+  playScreenSong: (screenId: string) => void;
   unlockAndPlay: () => void;
   confettiId: number;
   popConfetti: () => void;
   fireworksId: number;
   launchFireworks: () => void;
+  skyCelebrationActive: boolean;
+  triggerSkyCelebration: () => void;
+  stopSkyCelebration: () => void;
 };
 
 const StudioContext = createContext<StudioValue | null>(null);
@@ -61,6 +72,12 @@ export function StudioProvider({ children }: { children: ReactNode }) {
   const [notice, setNotice] = useState<string | null>(null);
   const [confettiId, setConfettiId] = useState(0);
   const [fireworksId, setFireworksId] = useState(0);
+  const [skyCelebrationActive, setSkyCelebrationActive] = useState(false);
+  const volumeRef = useRef(80);
+  const mutedRef = useRef(false);
+  const [volume, setVolumeState] = useState(80);
+  const [muted, setMuted] = useState(false);
+  const [soundEffects, setSoundEffectsState] = useState(true);
   const songs = siteConfig.songs;
 
   const go = useCallback(
@@ -107,6 +124,10 @@ export function StudioProvider({ children }: { children: ReactNode }) {
               if (cancelled || !player) return;
               playerRef.current = player;
               setReady(true);
+              player.setVolume(volumeRef.current);
+              if (mutedRef.current) player.mute();
+              else player.unMute();
+
               if (indexRef.current !== 0) {
                 player.loadVideoById(songs[indexRef.current].videoId);
               }
@@ -127,10 +148,10 @@ export function StudioProvider({ children }: { children: ReactNode }) {
                 setPlaying(false);
               } else if (event.data === state.ENDED) {
                 setPlaying(false);
-                const next = (indexRef.current + 1) % songs.length;
-                indexRef.current = next;
-                setIndex(next);
-                playerRef.current?.loadVideoById(songs[next].videoId);
+                const nextSong = (indexRef.current + 1) % songs.length;
+                indexRef.current = nextSong;
+                setIndex(nextSong);
+                playerRef.current?.loadVideoById(songs[nextSong].videoId);
               }
             },
             onError: (event) => {
@@ -142,11 +163,11 @@ export function StudioProvider({ children }: { children: ReactNode }) {
                 return;
               }
               setNotice("Skipped a song that wouldn't play here.");
-              const next = (indexRef.current + 1) % songs.length;
-              indexRef.current = next;
-              setIndex(next);
+              const nextSong = (indexRef.current + 1) % songs.length;
+              indexRef.current = nextSong;
+              setIndex(nextSong);
               window.setTimeout(() => {
-                playerRef.current?.loadVideoById(songs[next].videoId);
+                playerRef.current?.loadVideoById(songs[nextSong].videoId);
               }, 400);
             },
           },
@@ -173,12 +194,12 @@ export function StudioProvider({ children }: { children: ReactNode }) {
     setUnlocked(true);
     const player = playerRef.current;
     if (player) {
-      player.unMute();
+      if (!muted) player.unMute();
       player.playVideo();
     } else {
       pendingPlay.current = true;
     }
-  }, []);
+  }, [muted]);
 
   const toggle = useCallback(() => {
     if (!unlockedRef.current) {
@@ -189,10 +210,10 @@ export function StudioProvider({ children }: { children: ReactNode }) {
     if (!player) return;
     if (playing) player.pauseVideo();
     else {
-      player.unMute();
+      if (!muted) player.unMute();
       player.playVideo();
     }
-  }, [playing, unlockAndPlay]);
+  }, [muted, playing, unlockAndPlay]);
 
   const next = useCallback(() => {
     unlockedRef.current = true;
@@ -215,8 +236,68 @@ export function StudioProvider({ children }: { children: ReactNode }) {
     [go],
   );
 
+  const playScreenSong = useCallback(
+    (screenId: string) => {
+      const targetIndex = songs.findIndex(
+        (s) =>
+          ("screenId" in s && s.screenId === screenId) ||
+          ("screen" in s && s.screen.toLowerCase().includes(screenId.toLowerCase())),
+      );
+      if (targetIndex !== -1) {
+        unlockedRef.current = true;
+        setUnlocked(true);
+        go(targetIndex, true);
+      }
+    },
+    [go, songs],
+  );
+
+  const setVolume = useCallback((val: number) => {
+    const clamped = Math.max(0, Math.min(100, val));
+    volumeRef.current = clamped;
+    setVolumeState(clamped);
+    const player = playerRef.current;
+    if (player) {
+      player.setVolume(clamped);
+      if (clamped > 0 && player.isMuted?.()) {
+        player.unMute();
+        mutedRef.current = false;
+        setMuted(false);
+      }
+    }
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    setMuted((prevMuted) => {
+      const nextMuted = !prevMuted;
+      mutedRef.current = nextMuted;
+      const player = playerRef.current;
+      if (player) {
+        if (nextMuted) player.mute();
+        else {
+          player.unMute();
+          player.setVolume(volumeRef.current || 70);
+        }
+      }
+      return nextMuted;
+    });
+  }, []);
+
+  const toggleSoundEffects = useCallback(() => {
+    setSoundEffectsState((prevFx) => {
+      const nextFx = !prevFx;
+      setSoundEffectsEnabled(nextFx);
+      return nextFx;
+    });
+  }, []);
+
   const popConfetti = useCallback(() => setConfettiId((n) => n + 1), []);
   const launchFireworks = useCallback(() => setFireworksId((n) => n + 1), []);
+  const triggerSkyCelebration = useCallback(() => {
+    setSkyCelebrationActive(true);
+    setFireworksId((n) => n + 1);
+  }, []);
+  const stopSkyCelebration = useCallback(() => setSkyCelebrationActive(false), []);
 
   const value = useMemo<StudioValue>(
     () => ({
@@ -225,15 +306,25 @@ export function StudioProvider({ children }: { children: ReactNode }) {
       index,
       unlocked,
       notice,
+      volume,
+      muted,
+      soundEffects,
+      setVolume,
+      toggleMute,
+      toggleSoundEffects,
       toggle,
       next,
       prev,
       playIndex,
+      playScreenSong,
       unlockAndPlay,
       confettiId,
       popConfetti,
       fireworksId,
       launchFireworks,
+      skyCelebrationActive,
+      triggerSkyCelebration,
+      stopSkyCelebration,
     }),
     [
       ready,
@@ -241,15 +332,25 @@ export function StudioProvider({ children }: { children: ReactNode }) {
       index,
       unlocked,
       notice,
+      volume,
+      muted,
+      soundEffects,
+      setVolume,
+      toggleMute,
+      toggleSoundEffects,
       toggle,
       next,
       prev,
       playIndex,
+      playScreenSong,
       unlockAndPlay,
       confettiId,
       popConfetti,
       fireworksId,
       launchFireworks,
+      skyCelebrationActive,
+      triggerSkyCelebration,
+      stopSkyCelebration,
     ],
   );
 

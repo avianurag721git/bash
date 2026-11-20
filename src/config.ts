@@ -16,7 +16,7 @@
  */
 
 const herName = "Jessi";
-const herNickname = "Meri Jaan";
+const herNickname = "Jessi";
 const hisName = "Yours";
 
 export const siteConfig = {
@@ -34,8 +34,14 @@ export const siteConfig = {
   /** Midnight at the start of her birthday, India time. */
   birthday: "2026-11-21T00:00:00+05:30",
 
+  /** Exactly 11:59 PM today (Nov 20, 2026 IST) before which the site is locked */
+  unlockTime: "2026-11-20T23:59:00+05:30",
+  lockKicker: "shh... it's a secret",
+  lockTitle: "Locked Until 11:59 PM Tonight",
+  lockSub: "A special birthday surprise for Jessi is sealed and waiting for the right moment.",
+
   envelopeKicker: "for your eyes only",
-  envelopeTitle: "A letter with your name on it",
+  envelopeTitle: "A letter for you on your special Birthday !",
   envelopeHint: "tap the seal",
 
   heroKicker: "today, and every day after",
@@ -104,61 +110,134 @@ export const siteConfig = {
       year: "Winter 2020",
       title: "Where we began",
       text: "One winter, six years ago. I never saved the exact day. The season was enough.",
-      photo: null,
+      photo: "photo-1.jpeg",
     },
     {
       year: "7 March 2020",
       title: "A day I'll never forget",
       text: "Not the day we met. Just a day that still feels like it belongs to us.",
-      photo: null,
+      photo: "photo-2.jpeg",
     },
     {
       year: "2021",
       title: "Learning you",
       text: "Long calls, inside jokes, and the year I memorised your favourite everything.",
-      photo: null,
+      photo: "photo-3.jpeg",
     },
     {
       year: "2022",
       title: "Side by side",
       text: "We grew up in the same direction, even on the days that were a mess.",
-      photo: null,
+      photo: "photo-4.jpeg",
     },
     {
       year: "2023",
       title: "Choosing us",
       text: "Not just falling. Staying. Again and again, on purpose.",
-      photo: null,
+      photo: "photo-5.jpeg",
     },
     {
       year: "2024",
       title: "Softer",
       text: "The year comfort started sounding a lot like your name.",
-      photo: null,
+      photo: "photo-6.jpeg",
     },
     {
       year: "2025",
       title: "Like home",
       text: "A whole year of 'you and me' feeling like the most natural sentence I know.",
-      photo: null,
+      photo: "photo-7.jpeg",
     },
   ],
 
   /**
-   * Official uploads, checked November 2026:
-   * T-Series, Sony Music India, and Saregama Music.
+   * Curated mixture of heartfelt tracks mapped to different screens & moods.
+   * Includes requested songs:
+   * - "Alfaaz (Akhiyan De Samne)" (Akhiyan de samne tu baitha rawein der tak)
+   * - "Ishq Hularay" by Zain Zohaib
+   * - "Rog Jaane" by Rahat Fateh Ali Khan
    */
   songs: [
-    { title: "Tum Hi Ho", movie: "Aashiqui 2", artist: "Arijit Singh", videoId: "pmxa2wKwhrA" },
-    { title: "Pehla Nasha", movie: "Jo Jeeta Wohi Sikandar", artist: "Udit Narayan, Sadhana Sargam", videoId: "ZYotlBxpM3Q" },
-    { title: "Tum Se Hi", movie: "Jab We Met", artist: "Mohit Chauhan", videoId: "mt9xg0mmt28" },
-    { title: "Raabta", movie: "Agent Vinod", artist: "Arijit Singh", videoId: "-d9nvq3402M" },
-    { title: "Agar Tum Saath Ho", movie: "Tamasha", artist: "Arijit Singh, Alka Yagnik", videoId: "sK7riqg2mr4" },
-    { title: "Pee Loon", movie: "Once Upon a Time in Mumbaai", artist: "Mohit Chauhan", videoId: "D8XFTglfSMg" },
-    { title: "Hawayein", movie: "Jab Harry Met Sejal", artist: "Arijit Singh", videoId: "cs1e0fRyI18" },
-    { title: "Tera Ban Jaunga", movie: "Kabir Singh", artist: "Akhil Sachdeva, Tulsi Kumar", videoId: "mQiiw7uRngk" },
-    { title: "Kesariya", movie: "Brahmāstra", artist: "Arijit Singh", videoId: "BddP6PYo2gs" },
-    { title: "Raataan Lambiyan", movie: "Shershaah", artist: "Jubin Nautiyal, Asees Kaur", videoId: "gvyUuxdRdR4" },
+    {
+      title: "Alfaaz (Akhiyan De Samne)",
+      movie: "Tu Baithe Rahe Der Tak",
+      artist: "Hamza Malik, Zain Zohaib",
+      videoId: "cQq6iLF66Gc",
+      screen: "Welcome & Birthday Card",
+      screenId: "birthday-card-section",
+    },
+    {
+      title: "Ishq Hularay",
+      movie: "Sufi Soul Romance",
+      artist: "Zain Zohaib",
+      videoId: "QtfHL7WfVCo",
+      screen: "Memory Gallery",
+      screenId: "memories",
+    },
+    {
+      title: "Rog Jaane",
+      movie: "Rahat Version",
+      artist: "Rahat Fateh Ali Khan, Palak Muchhal",
+      videoId: "533K6--Lkac",
+      screen: "Love Letter & Timeline",
+      screenId: "letter",
+    },
+    {
+      title: "Tum Se Hi",
+      movie: "Jab We Met",
+      artist: "Mohit Chauhan",
+      videoId: "mt9xg0mmt28",
+      screen: "Cake & Candles",
+      screenId: "cake-experience-section",
+    },
+    {
+      title: "Pee Loon",
+      movie: "Once Upon a Time in Mumbaai",
+      artist: "Mohit Chauhan",
+      videoId: "D8XFTglfSMg",
+      screen: "Cute Surprises",
+      screenId: "surprises",
+    },
+    {
+      title: "Kesariya",
+      movie: "Brahmāstra",
+      artist: "Arijit Singh",
+      videoId: "BddP6PYo2gs",
+      screen: "Valentine & Grand Finale",
+      screenId: "valentine",
+    },
+    {
+      title: "Pehla Nasha",
+      movie: "Jo Jeeta Wohi Sikandar",
+      artist: "Udit Narayan, Sadhana Sargam",
+      videoId: "ZYotlBxpM3Q",
+      screen: "How It Began",
+      screenId: "together",
+    },
+    {
+      title: "Tum Hi Ho",
+      movie: "Aashiqui 2",
+      artist: "Arijit Singh",
+      videoId: "pmxa2wKwhrA",
+      screen: "Reasons I Love You",
+      screenId: "reasons",
+    },
+    {
+      title: "Raabta",
+      movie: "Agent Vinod",
+      artist: "Arijit Singh",
+      videoId: "-d9nvq3402M",
+      screen: "Little Wishes",
+      screenId: "wishes",
+    },
+    {
+      title: "Tera Ban Jaunga",
+      movie: "Kabir Singh",
+      artist: "Akhil Sachdeva, Tulsi Kumar",
+      videoId: "mQiiw7uRngk",
+      screen: "Forever & Always",
+      screenId: "finale",
+    },
   ],
 
   letterKicker: "read this slowly",

@@ -1,13 +1,18 @@
-import { useEffect, useRef, useState, type FormEvent, type PointerEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/config";
 import { formatIndiaDate, pad2, countdownTo } from "@/lib/time";
 import { useNow } from "@/lib/use-now";
 import { useStudio } from "@/context/studio";
-import { CakeArt, LoveScene, YearArt } from "@/components/art";
+import { YearArt } from "@/components/art";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { BirthdayCard } from "@/components/birthday-card";
+import { InteractiveCake } from "@/components/interactive-cake";
+import { MemoryGallery } from "@/components/memory-gallery";
+import { CartoonSurprises } from "@/components/cartoon-surprises";
+import { StoryNav } from "@/components/story-nav";
+import { AestheticLoveScene } from "@/components/aesthetic-love-scene";
 
 function Block({
   id,
@@ -115,9 +120,7 @@ function Countdown() {
           </div>
         ))}
       </div>
-      <p className="mt-4 text-center text-sm text-ink/65">
-        Until midnight on {formatIndiaDate(siteConfig.birthday)}, India time.
-      </p>
+
     </Block>
   );
 }
@@ -169,18 +172,20 @@ function Characters() {
   const found = taps >= siteConfig.easterTaps;
   return (
     <Block id="scene" kicker="our little crowd" title="You, me, and the soft toys">
-      <div className="glass mx-auto max-w-xl rounded-[32px] px-3 py-4 sm:px-6">
-        <LoveScene
+      <div className="glass mx-auto max-w-xl rounded-[32px] px-3 py-5 sm:px-6 shadow-xl border border-rose-100">
+        <AestheticLoveScene
           onBunny={() => {
             setTaps((count) => count + 1);
           }}
         />
-        <p className="pb-2 text-center text-xs text-ink/45">{found ? "" : siteConfig.sceneHint}</p>
+        <p className="pb-2 text-center text-xs text-ink/60 font-medium">
+          {found ? "" : "psst — tap the bunny to tickle, or tap us & teddy for sweet surprises ✨"}
+        </p>
         {found ? (
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mx-auto mb-3 max-w-sm rounded-2xl bg-white/80 px-4 py-3 text-center font-hand text-2xl leading-snug text-ink"
+            className="mx-auto mb-3 max-w-sm rounded-2xl bg-white/90 px-4 py-3 text-center font-hand text-2xl leading-snug text-rose-600 shadow-md border border-rose-100"
           >
             {siteConfig.easterEgg}
           </motion.p>
@@ -190,135 +195,86 @@ function Characters() {
   );
 }
 
-function Cake() {
-  const litRef = useRef(true);
-  const [lit, setLit] = useState(true);
-  const [listening, setListening] = useState(false);
-  const [micNote, setMicNote] = useState<string | null>(null);
-  const [wish, setWish] = useState("");
-  const [sent, setSent] = useState<string | null>(null);
-  const stopRef = useRef<(() => void) | null>(null);
-  const { popConfetti } = useStudio();
 
-  useEffect(() => () => stopRef.current?.(), []);
 
-  function blow() {
-    if (!litRef.current) return;
-    litRef.current = false;
-    setLit(false);
-    setListening(false);
-    stopRef.current?.();
-    popConfetti();
-  }
-
-  async function listen() {
-    if (!litRef.current) return;
-    if (!navigator.mediaDevices?.getUserMedia) {
-      setMicNote(siteConfig.cakeMicDenied);
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const audio = new AudioContext();
-      const source = audio.createMediaStreamSource(stream);
-      const analyser = audio.createAnalyser();
-      analyser.fftSize = 1024;
-      source.connect(analyser);
-      const bins = new Uint8Array(analyser.fftSize);
-      let frame = 0;
-      let stopped = false;
-      const cleanup = () => {
-        if (stopped) return;
-        stopped = true;
-        window.cancelAnimationFrame(frame);
-        stream.getTracks().forEach((track) => track.stop());
-        void audio.close();
-        stopRef.current = null;
-        setListening(false);
-      };
-      const tick = () => {
-        if (stopped) return;
-        analyser.getByteTimeDomainData(bins);
-        let sum = 0;
-        for (const value of bins) {
-          const sample = (value - 128) / 128;
-          sum += sample * sample;
-        }
-        if (Math.sqrt(sum / bins.length) > 0.16) {
-          cleanup();
-          blow();
-          return;
-        }
-        frame = window.requestAnimationFrame(tick);
-      };
-      stopRef.current = cleanup;
-      setMicNote(null);
-      setListening(true);
-      frame = window.requestAnimationFrame(tick);
-    } catch {
-      setMicNote(siteConfig.cakeMicDenied);
-    }
-  }
-
-  function sendWish(event: FormEvent) {
-    event.preventDefault();
-    setSent(wish.trim() || "a soft, happy year");
-    setWish("");
-  }
+function ScreenSoundtrackBadge({
+  screenId,
+  songTitle,
+  subtitle,
+}: {
+  screenId: string;
+  songTitle: string;
+  subtitle?: string;
+}) {
+  const { playScreenSong, playing, index } = useStudio();
+  const currentSong = siteConfig.songs[index];
+  const isThisSongPlaying =
+    playing && currentSong?.title.toLowerCase().includes(songTitle.toLowerCase().slice(0, 6));
 
   return (
-    <Block id="cake" kicker={siteConfig.cakeKicker} title={siteConfig.cakeTitle} intro={siteConfig.cakeLead}>
-      <div className="mx-auto max-w-sm">
-        <button
-          type="button"
-          onClick={blow}
-          disabled={!lit}
-          className="block w-full rounded-[32px] outline-none focus-visible:ring-3 focus-visible:ring-rose-300"
-          aria-label={lit ? "Blow out the candles" : "The candles are out"}
-        >
-          <CakeArt lit={lit} />
-        </button>
-        {lit ? (
-          <div className="mt-2 flex flex-col items-center gap-2">
-            <Button type="button" onClick={() => void listen()} disabled={listening} className="h-11 rounded-full px-6">
-              {listening ? siteConfig.cakeListening : siteConfig.cakeMic}
-            </Button>
-            {micNote ? <p className="text-center text-sm text-ink/70">{micNote}</p> : null}
-          </div>
+    <div className="mb-4 flex justify-center">
+      <button
+        type="button"
+        onClick={() => playScreenSong(screenId)}
+        className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold transition-all shadow-xs border cursor-pointer ${isThisSongPlaying
+          ? "bg-rose-500 text-white border-rose-600 shadow-md scale-105"
+          : "bg-white/80 text-rose-700 border-rose-200/80 hover:bg-white hover:scale-102"
+          }`}
+        title={`Play screen soundtrack: ${songTitle}`}
+      >
+        <span className="text-sm">🎵</span>
+        <span>
+          Screen Track: <strong>{songTitle}</strong>
+          {subtitle ? <span className="opacity-75 font-normal ml-1">({subtitle})</span> : null}
+        </span>
+        {isThisSongPlaying ? (
+          <span className="flex items-center gap-0.5 ml-1 h-3">
+            <span className="w-0.5 bg-white h-full animate-[pulse_0.6s_infinite]" />
+            <span className="w-0.5 bg-white h-2/3 animate-[pulse_0.4s_infinite]" />
+            <span className="w-0.5 bg-white h-4/5 animate-[pulse_0.7s_infinite]" />
+          </span>
         ) : (
-          <div className="glass rounded-[28px] p-4">
-            {sent ? (
-              <div className="text-center">
-                <motion.p
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: -8 }}
-                  className="font-hand text-3xl text-rose-500"
-                >
-                  {sent}
-                </motion.p>
-                <p className="mt-3 text-sm leading-relaxed text-ink/75">{siteConfig.wishDone}</p>
-              </div>
-            ) : (
-              <form onSubmit={sendWish} className="flex flex-col gap-3">
-                <label className="text-sm font-medium text-ink" htmlFor="wish">
-                  Your wish
-                </label>
-                <Input
-                  id="wish"
-                  value={wish}
-                  onChange={(event) => setWish(event.target.value)}
-                  placeholder={siteConfig.wishPlaceholder}
-                  maxLength={140}
-                  className="h-12 rounded-full bg-white/80 px-4 text-base"
-                />
-                <Button type="submit" className="h-11 rounded-full">
-                  {siteConfig.wishButton}
-                </Button>
-              </form>
-            )}
-          </div>
+          <span className="text-[10px] bg-rose-100 text-rose-600 rounded-full px-1.5 py-0.2 ml-0.5 font-bold">
+            Play ▶
+          </span>
         )}
-      </div>
+      </button>
+    </div>
+  );
+}
+
+function BirthdayCardSection() {
+  return (
+    <Block
+      id="birthday-card-section"
+      kicker="a gift for you"
+      title="Your Birthday Card"
+      intro="Touch the card to open your 3D unfolding birthday surprise."
+    >
+      <ScreenSoundtrackBadge
+        screenId="birthday-card-section"
+        songTitle="Alfaaz (Akhiyan De Samne)"
+        subtitle="Tu Baithe Rahe Der Tak"
+      />
+      <BirthdayCard />
+    </Block>
+  );
+}
+
+function CakeExperienceSection() {
+  return (
+    <Block
+      id="cake-experience-section"
+      kicker={siteConfig.cakeKicker}
+      title={siteConfig.cakeTitle}
+      intro={siteConfig.cakeLead}
+    >
+      <ScreenSoundtrackBadge
+        screenId="cake-experience-section"
+        songTitle="Tum Se Hi"
+        subtitle="Jab We Met"
+      />
+      <InteractiveCake />
     </Block>
   );
 }
@@ -497,12 +453,14 @@ function PhotoFrame({ file, index, label }: { file: string | null; index: number
   const [missing, setMissing] = useState(false);
   if (!file || missing) return <YearArt index={index} />;
   return (
-    <img
-      src={`${import.meta.env.BASE_URL}photos/${file}`}
-      alt={label}
-      className="h-full w-full object-cover"
-      onError={() => setMissing(true)}
-    />
+    <div className="flex h-full w-full items-center justify-center p-2 bg-rose-50/40">
+      <img
+        src={`${import.meta.env.BASE_URL}photos/${file}`}
+        alt={label}
+        className="max-h-full max-w-full rounded-xl object-contain shadow-xs transition-transform duration-300 hover:scale-102"
+        onError={() => setMissing(true)}
+      />
+    </div>
   );
 }
 
@@ -521,7 +479,7 @@ function Timeline() {
                   index % 2 === 1 && "md:col-start-2",
                 )}
               >
-                <div className="aspect-[16/9] bg-rose-50">
+                <div className="aspect-[4/3] sm:aspect-[16/9] bg-rose-50/30 overflow-hidden">
                   <PhotoFrame key={item.photo ?? "drawing"} file={item.photo} index={index} label={`${item.year}, ${item.title}`} />
                 </div>
                 <div className="p-5">
@@ -555,6 +513,11 @@ function Letter() {
 
   return (
     <Block id="letter" kicker={siteConfig.letterKicker} title={siteConfig.letterTitle}>
+      <ScreenSoundtrackBadge
+        screenId="letter"
+        songTitle="Rog Jaane"
+        subtitle="Rahat Fateh Ali Khan"
+      />
       <div
         ref={ref}
         className="glass mx-auto max-w-xl cursor-pointer rounded-[32px] px-6 py-8 sm:px-10"
@@ -609,6 +572,11 @@ function Valentine() {
       title={siteConfig.valentineQuestion}
       titleClassName="text-[2rem] leading-tight sm:text-5xl"
     >
+      <ScreenSoundtrackBadge
+        screenId="valentine"
+        songTitle="Kesariya"
+        subtitle="Arijit Singh"
+      />
       <div ref={areaRef} className="relative mx-auto h-64 max-w-lg">
         <Button type="button" onClick={sayYes} className="absolute top-6 left-1/2 z-20 h-12 -translate-x-1/2 rounded-full px-6 text-base">
           {siteConfig.yesLabel}
@@ -639,20 +607,24 @@ function Valentine() {
 }
 
 function Finale() {
-  const { launchFireworks, popConfetti } = useStudio();
+  const { launchFireworks, popConfetti, triggerSkyCelebration, skyCelebrationActive } = useStudio();
   return (
     <Block id="finale" kicker={siteConfig.finaleKicker} title={siteConfig.finaleTitle} intro={siteConfig.finaleBody}>
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center justify-center gap-3">
         <Button
           type="button"
-          className="h-12 rounded-full px-6"
+          className="h-14 rounded-full px-8 text-base font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white border-none"
           onClick={() => {
             popConfetti();
             launchFireworks();
+            triggerSkyCelebration();
           }}
         >
-          {siteConfig.finaleReplay}
+          {skyCelebrationActive ? "✨ Sky Shots Blasting... (10s) 🎆" : `🎆 ${siteConfig.finaleReplay}`}
         </Button>
+        <p className="text-xs text-ink/60">
+          Tap to turn into dark mode with sky shot fireworks & sparkles for 10s ✨
+        </p>
       </div>
       <p className="mt-16 text-center text-sm text-ink/55">{siteConfig.footer}</p>
       <p className="mt-2 text-center font-script text-xl text-rose-400">— {siteConfig.hisName}</p>
@@ -663,15 +635,19 @@ function Finale() {
 export function LovePage() {
   return (
     <main className="relative z-10 pb-40">
+      <StoryNav />
       <Hero />
+      <BirthdayCardSection />
       <Countdown />
       <Together />
+      <CakeExperienceSection />
+      <Letter />
+      <MemoryGallery />
+      <Timeline />
       <Characters />
-      <Cake />
+      <CartoonSurprises />
       <Wishes />
       <Reasons />
-      <Timeline />
-      <Letter />
       <Valentine />
       <Finale />
     </main>

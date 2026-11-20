@@ -310,3 +310,47 @@ body {
     scroll-behavior: auto;
   }
 }
+
+/* ========================================================
+   Night Sky Dark Mode Experience (10-second celebration)
+   ======================================================== */
+body {
+  transition: background 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.8s ease;
+}
+
+body.dark-sky-active {
+  color: #fff0f5 !important;
+  background:
+    radial-gradient(900px 520px at 15% -10%, #2f123d 0%, transparent 60%),
+    radial-gradient(800px 480px at 85% 10%, #1a0a2a 0%, transparent 55%),
+    radial-gradient(700px 500px at 50% 110%, #150824 0%, transparent 50%),
+    #0a0312 !important;
+}
+
+body.dark-sky-active .glass {
+  background-color: rgb(24 10 36 / 0.82) !important;
+  border-color: rgb(255 255 255 / 0.18) !important;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.65), 0 0 20px rgb(255 105 180 / 0.12) !important;
+}
+
+body.dark-sky-active .text-ink {
+  color: #fff1f5 !important;
+}
+
+body.dark-sky-active .text-ink\/75,
+body.dark-sky-active .text-ink\/70,
+body.dark-sky-active .text-ink\/65,
+body.dark-sky-active .text-ink\/60,
+body.dark-sky-active .text-ink\/55,
+body.dark-sky-active .text-ink\/50,
+body.dark-sky-active .text-ink\/30 {
+  color: #f8bbd0 !important;
+}
+
+body.dark-sky-active .bg-white\/70,
+body.dark-sky-active .bg-white\/80,
+body.dark-sky-active .bg-white\/90 {
+  background-color: rgb(35 16 52 / 0.85) !important;
+  border-color: rgb(255 255 255 / 0.12) !important;
+  color: #fff0f5 !important;
+}

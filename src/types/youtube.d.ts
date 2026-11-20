@@ -5,6 +5,9 @@ interface YtPlayer {
   cueVideoById: (id: string) => void;
   unMute: () => void;
   mute: () => void;
+  isMuted?: () => boolean;
+  setVolume: (volume: number) => void;
+  getVolume?: () => number;
   destroy: () => void;
 }
 
