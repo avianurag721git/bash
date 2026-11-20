@@ -37,6 +37,13 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
   const countdown = countdownTo(now, siteConfig.unlockTime);
   const { popConfetti } = useStudio();
 
+  const unlockTimeLabel = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(new Date(siteConfig.unlockTime));
+
   const [tapsOnLock, setTapsOnLock] = useState(0);
   const [showTease, setShowTease] = useState(false);
   const [showPasscodeModal, setShowPasscodeModal] = useState(false);
@@ -180,7 +187,7 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
   };
 
   const teaseMessages = [
-    "Nice try! No peeking before 12:37 AM 💕",
+    `Nice try! No peeking before ${unlockTimeLabel} 💕`,
     "Patience, gorgeous! The best gifts take time ✨",
     "Still locked! Shh... it's worth the wait 🤫",
     "Almost there! Just watch the countdown tick ⏳",
@@ -386,7 +393,7 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
         {/* Encouraging message */}
         <div className="rounded-2xl bg-white/60 p-3 text-xs leading-relaxed text-ink/70 border border-white/70">
           <p>
-            ✨ Enjoy the song while we wait! The page will magically open at <strong>12:37 AM</strong>.
+            ✨ Enjoy the song while we wait! The page will magically open at <strong>{unlockTimeLabel}</strong>.
           </p>
         </div>
 
@@ -422,7 +429,7 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
               </div>
               {passcodeError && (
                 <span className="text-[11px] font-bold text-rose-500 animate-shake">
-                  Incorrect passcode! Try "jessi" or wait for 12:37 AM 💕
+                  Incorrect passcode! Try "jessi" or wait for {unlockTimeLabel} 💕
                 </span>
               )}
             </motion.form>
