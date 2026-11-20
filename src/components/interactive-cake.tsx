@@ -199,9 +199,9 @@ export function InteractiveCake({ onSequenceComplete, className }: InteractiveCa
   };
 
   return (
-    <div className={`mx-auto flex w-full max-w-md sm:max-w-xl flex-col items-center ${className ?? ""}`}>
+    <div className={`mx-auto flex w-full max-w-2xl lg:max-w-3xl flex-col items-center ${className ?? ""}`}>
       {/* Interactive Animated Cake Art */}
-      <div className="relative w-full cursor-pointer py-2" onClick={() => stage === "ready_to_blow" && handleBlow()}>
+      <div className="relative w-full max-w-sm cursor-pointer py-2" onClick={() => stage === "ready_to_blow" && handleBlow()}>
         <CakeArtAnimated stage={stage} />
       </div>
 

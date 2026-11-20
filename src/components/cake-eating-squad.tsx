@@ -115,73 +115,71 @@ export function CakeEatingSquad() {
         </p>
       </div>
 
-      {/* 4 Elegant Bestie Cards Grid */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {/* 4 Elegant Bestie Cards Grid (2x2 on desktop/tablet, 1 col on mobile) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
         {BESTIES.map((bestie) => {
           const isEaten = eaten[bestie.id];
 
           return (
             <motion.div
               key={bestie.id}
-              whileHover={{ y: -4, scale: 1.02 }}
+              whileHover={{ y: -3, scale: 1.01 }}
               onClick={() => handleBite(bestie.id)}
-              className="group relative flex flex-col justify-between rounded-2xl bg-white/95 p-4 shadow-sm border border-rose-100 hover:border-rose-300 hover:shadow-md transition-all cursor-pointer"
+              className="group relative flex flex-col justify-between rounded-2xl bg-white/95 p-4 sm:p-4.5 shadow-sm border border-rose-100 hover:border-rose-300 hover:shadow-md transition-all cursor-pointer"
             >
               {/* Top Row: Name, Tag & Avatar */}
               <div>
-                <div className="flex items-center justify-between gap-2 pb-2 border-b border-rose-100/60">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-rose-100">
+                  <div className="flex items-center gap-2.5">
                     {/* Cute Avatar Badge */}
                     <div
-                      className={`flex size-10 items-center justify-center rounded-2xl text-lg shadow-xs ${bestie.avatarBg}`}
+                      className={`flex size-11 shrink-0 items-center justify-center rounded-2xl text-xl shadow-xs ${bestie.avatarBg}`}
                     >
                       <span>{bestie.avatarEmoji}</span>
                     </div>
 
                     <div>
-                      <h4 className="text-base font-bold text-ink leading-tight">
+                      <h4 className="text-base sm:text-lg font-bold text-ink leading-tight">
                         {bestie.name}
                       </h4>
-                      <p className="text-[10px] font-semibold text-rose-500">
+                      <p className="text-xs font-semibold text-rose-500 mt-0.5">
                         {bestie.role}
                       </p>
                     </div>
                   </div>
 
                   <span
-                    className={`rounded-full px-2 py-0.5 text-[9px] font-bold border ${bestie.tagColor}`}
+                    className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${bestie.tagColor}`}
                   >
                     Bestie 💕
                   </span>
                 </div>
 
                 {/* Heartfelt Birthday Note to Jessi */}
-                <div className="my-3 rounded-xl bg-rose-50/50 p-2.5 text-left border border-rose-100/70">
-                  <p className="text-xs leading-relaxed text-ink/85 italic">
+                <div className="my-3 rounded-2xl bg-rose-50/60 p-3 text-left border border-rose-100/80">
+                  <p className="text-xs sm:text-sm leading-relaxed text-ink/85 italic">
                     "{bestie.wish}"
                   </p>
                 </div>
               </div>
 
               {/* Bottom Row: Interactive Cake Plate */}
-              <div className="pt-2 border-t border-rose-100/60">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-ink/60 font-medium">
-                    Favourite: <strong className="text-ink/80">{bestie.favoritePart}</strong>
-                  </span>
+              <div className="pt-2.5 border-t border-rose-100 flex items-center justify-between gap-2">
+                <span className="text-xs text-ink/70 font-medium truncate">
+                  Fav: <strong className="text-rose-700">{bestie.favoritePart}</strong>
+                </span>
 
-                  {/* Cake Slice Status Pill */}
-                  <motion.div
-                    animate={isEaten ? { scale: [0.9, 1.1, 1] } : {}}
-                    className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold transition-colors ${
-                      isEaten
-                        ? "bg-rose-500 text-white shadow-xs"
-                        : "bg-rose-100 text-rose-700 hover:bg-rose-200"
-                    }`}
-                  >
-                    <span>{isEaten ? "Enjoyed! 😋" : "Feed Slice 🍰"}</span>
-                  </motion.div>
-                </div>
+                {/* Cake Slice Status Pill */}
+                <motion.div
+                  animate={isEaten ? { scale: [0.95, 1.08, 1] } : {}}
+                  className={`flex items-center gap-1 rounded-full px-3.5 py-1 text-xs font-bold transition-all shadow-xs shrink-0 ${
+                    isEaten
+                      ? "bg-rose-500 text-white shadow-xs"
+                      : "bg-rose-100 text-rose-700 hover:bg-rose-200 hover:scale-105"
+                  }`}
+                >
+                  <span>{isEaten ? "Enjoyed! 😋" : "Feed Slice 🍰"}</span>
+                </motion.div>
               </div>
             </motion.div>
           );

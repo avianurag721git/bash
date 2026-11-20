@@ -34,10 +34,10 @@ export const siteConfig = {
   /** Midnight at the start of her birthday, India time. */
   birthday: "2026-11-21T00:00:00+05:30",
 
-  /** Exactly 11:59 PM today (Nov 20, 2026 IST) before which the site is locked */
-  unlockTime: "2026-11-20T23:59:00+05:30",
+  /** Exactly 12:37 AM today (Nov 21, 2026 IST) before which the site is locked */
+  unlockTime: "2026-11-21T00:45:00+05:30",
   lockKicker: "shh... it's a secret",
-  lockTitle: "Locked Until 11:59 PM Tonight",
+  lockTitle: "Locked Until 12:37 AM",
   lockSub: "A special birthday surprise for Jessi is sealed and waiting for the right moment.",
   lockSong: {
     title: "Tainu Khabar Nahi",

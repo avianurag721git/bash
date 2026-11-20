@@ -163,7 +163,7 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
   const handlePasscodeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const clean = passcode.trim().toLowerCase();
-    if (clean === "jessi" || clean === "1159" || clean === "love" || clean === "admin") {
+    if (clean === "jessi" || clean === "1237" || clean === "1159" || clean === "love" || clean === "admin") {
       try {
         playerRef.current?.pauseVideo();
         playerRef.current?.destroy?.();
@@ -180,7 +180,7 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
   };
 
   const teaseMessages = [
-    "Nice try! No peeking before 11:59 PM 💕",
+    "Nice try! No peeking before 12:37 AM 💕",
     "Patience, gorgeous! The best gifts take time ✨",
     "Still locked! Shh... it's worth the wait 🤫",
     "Almost there! Just watch the countdown tick ⏳",
@@ -386,7 +386,7 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
         {/* Encouraging message */}
         <div className="rounded-2xl bg-white/60 p-3 text-xs leading-relaxed text-ink/70 border border-white/70">
           <p>
-            ✨ Enjoy the song while we wait! The page will magically open at <strong>11:59 PM</strong>.
+            ✨ Enjoy the song while we wait! The page will magically open at <strong>12:37 AM</strong>.
           </p>
         </div>
 
@@ -422,7 +422,7 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
               </div>
               {passcodeError && (
                 <span className="text-[11px] font-bold text-rose-500 animate-shake">
-                  Incorrect passcode! Try "jessi" or wait for 11:59 PM 💕
+                  Incorrect passcode! Try "jessi" or wait for 12:37 AM 💕
                 </span>
               )}
             </motion.form>
