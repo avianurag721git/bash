@@ -39,6 +39,12 @@ export const siteConfig = {
   lockKicker: "shh... it's a secret",
   lockTitle: "Locked Until 11:59 PM Tonight",
   lockSub: "A special birthday surprise for Jessi is sealed and waiting for the right moment.",
+  lockSong: {
+    title: "Tainu Khabar Nahi",
+    movie: "Munjya",
+    artist: "Arijit Singh, Sachin-Jigar",
+    videoId: "CxNRNdjKFU8",
+  },
 
   envelopeKicker: "for your eyes only",
   envelopeTitle: "A letter for you on your special Birthday !",
