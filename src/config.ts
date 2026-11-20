@@ -37,7 +37,7 @@ export const siteConfig = {
   /** Exactly 12:37 AM today (Nov 21, 2026 IST) before which the site is locked */
   unlockTime: "2026-11-21T00:45:00+05:30",
   lockKicker: "shh... it's a secret",
-  lockTitle: "Locked Until 12:37 AM",
+  lockTitle: "Locked Until 12:45 AM",
   lockSub: "A special birthday surprise for Jessi is sealed and waiting for the right moment.",
   lockSong: {
     title: "Tainu Khabar Nahi",
